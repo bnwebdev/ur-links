@@ -1,11 +1,11 @@
 import { Module } from "../module-core";
-import links from "./links";
 import database from "./database";
 import common from "./common";
 import info from "./info";
+import documents from "./documents";
 
 export default new Module(
-  links,
+  documents,
   info,
   database,
   common,

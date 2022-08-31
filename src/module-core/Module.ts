@@ -1,12 +1,9 @@
 import { cloneElement, ReactElement } from "react"
 import { RouteProps } from "react-router-dom"
-import { CoreModule } from "./CoreModule"
 
-export type NavItem = {
-  to: string
-  label: string
-  children?: NavItem[]
-}
+import { StoresDescription } from "../modules/database"
+import { AppContext, AppCreateHandler, BeforeAppCreateHandler, Localization, NavItem } from "../types"
+import { CoreModule } from "./CoreModule"
 
 export interface ModuleShape {
   navItem?: NavItem[]
@@ -15,7 +12,15 @@ export interface ModuleShape {
 
   route?: ReactElement<RouteProps>[]
 
-  localization?: Array<{ ns: string; resources: Record<string, any> }>
+  localization?: Localization[]
+
+  contextMaker?: Array<<Values extends keyof AppContext>() => Pick<AppContext, Values>>
+
+  onAppCreate?: Array<AppCreateHandler<Module>>
+
+  onBeforeAppCreate?: Array<BeforeAppCreateHandler<Module>>
+
+  storeDescription?: Partial<StoresDescription>
 }
 
 export interface Module extends ModuleShape {}
@@ -38,5 +43,24 @@ export class Module extends CoreModule {
 
   get localizations() {
     return this.localization || []
+  }
+
+  get context(): AppContext {
+    return this.contextMaker?.reduce(
+      (partial, maker) => ({ ...partial, ...maker() }),
+      {} as AppContext
+    ) || {} as AppContext
+  }
+
+  async initialize(): Promise<void> {
+    await (this.onBeforeAppCreate || []).reduce(async (promise, onBeforeAppCreate) => {
+      await promise;
+      return onBeforeAppCreate(this)
+    }, Promise.resolve())
+
+    return (this.onAppCreate || []).reduce(async (promise, onAppCreate) => {
+        await promise;
+        return onAppCreate(this)
+      }, Promise.resolve())
   }
 }

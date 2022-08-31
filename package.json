@@ -5,6 +5,8 @@
   "homepage": "/ur-links",
   "dependencies": {
     "bootstrap": "^5.2.0",
+    "dexie": "^3.2.2",
+    "dexie-react-hooks": "^1.1.1",
     "fractal-objects": "^0.10.4",
     "react": "^18.2.0",
     "react-bootstrap": "^2.5.0",

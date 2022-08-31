@@ -2,7 +2,7 @@ import { FC } from "react";
 import { Nav, Navbar } from "react-bootstrap";
 import { LinkContainer } from 'react-router-bootstrap'
 
-import { NavItem } from "../module-core";
+import { NavItem } from "../types";
 
 type Props = {
     navItems: NavItem[]
