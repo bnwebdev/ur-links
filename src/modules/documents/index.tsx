@@ -8,7 +8,7 @@ export * from './types'
 export default new Module({
     navItem: [{ to: '/', label: 'Home' }],
     route: [<Route path="/" element={<ListLinks />} />],
-    storeDescription: { 
-        documents: '++id, name, authors, meta'
+    storeDescription: {
+        documents: '++id, type, name, authors, meta'
     }
 })
