@@ -9,7 +9,7 @@ type Props = {
 }
 
 const CustomNavbar: FC<Props> = ({ navItems }) => (
-    <Navbar bg="dark" variant="dark">
+    <Navbar bg="dark" variant="dark" className="mb-2">
         <Nav>
             {navItems.map(
                 ({ to, label}) =>
