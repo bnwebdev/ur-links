@@ -1,9 +1,17 @@
 import ReactDOM from 'react-dom/client';
+
+import RootModule from './modules';
 import App from './App';
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
-root.render(<App />);
+const bootstrap = async () => {
+  await RootModule.initialize()
+  
+  const root = ReactDOM.createRoot(
+    document.getElementById('root') as HTMLElement
+  );
+  root.render(<App />);
+}
+
+bootstrap().catch(console.error)

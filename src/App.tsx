@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { HashRouter, Route, Routes } from "react-router-dom";
+
 import { Error404, Layout } from "./components";
 import RootModule from "./modules";
 
