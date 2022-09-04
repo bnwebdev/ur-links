@@ -15,20 +15,14 @@ const DocumentTypes: FC = () => {
         return <h1>Loading data</h1>
     }
 
-    if (!documentTypes.length) {
-        return (<>
-            <h1>Nothing!</h1>
-            <LinkContainer to="/document-types/create">
-                <Button>Create</Button>
-            </LinkContainer>
-        </>)
-    }
-
     return (<>
-    <DocumentTypeList {...{ documentTypes, handleRemove }} />
-    <LinkContainer to="/document-types/create">
-        <Button>Create</Button>
-    </LinkContainer>
+        {documentTypes.length 
+            ? <DocumentTypeList {...{ documentTypes, handleRemove }} /> 
+            : <h1>Nothing!</h1>
+        }
+        <LinkContainer to="/document-types/create">
+            <Button>Create</Button>
+        </LinkContainer>
     </>)
 }
 
