@@ -1,4 +1,6 @@
 export type Localization = {
-    ns: string; 
-    resources: Record<string, any>
+    namespace: string; 
+    resources: {
+        [locale: string]: Record<string, any>;
+    };
 };

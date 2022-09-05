@@ -1,3 +1,4 @@
+import { fold } from "fractal-objects"
 import { cloneElement, ReactElement } from "react"
 import { RouteProps } from "react-router-dom"
 
@@ -42,7 +43,22 @@ export class Module extends CoreModule {
   }
 
   get localizations() {
-    return this.localization || []
+    const result: Record<string, any> = {};
+    (this.localization || []).forEach(({ resources, namespace }) => {
+      Object.keys(resources).forEach((locale) => {
+        if (!result[locale]) {
+          result[locale] = {}
+        }
+
+        if (!result[locale][namespace]) {
+          result[locale][namespace] = {}
+        }
+
+        result[locale][namespace] = fold([result[locale][namespace], resources[locale]])
+      })
+    })
+
+    return result;
   }
 
   get context(): AppContext {

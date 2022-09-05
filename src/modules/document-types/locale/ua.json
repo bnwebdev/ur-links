@@ -1,0 +1,34 @@
+{
+    "navLink": "Типи Документів",
+    "createLink": "Створити Тип",
+    "removeModal": {
+        "title": "Видалити {{name}}",
+        "question": "Ви збираєтесь видалити цей тип. Ви впевнені?",
+        "okText": "Так",
+        "cancelText": "Ні"
+    },
+    "removeType": "Видалити",
+    "submodules": {
+        "create": {
+            "form": {
+                "name": "Ім'я типу",
+                "fieldsInDocument": "Поля в документі",
+                "addField": "Додати поле",
+                "submit": "Створити новий тип",
+                "removeField": "Видалити"
+            },
+            "addFieldModal": {
+                "title": "Додати поле",
+                "fieldName": "Ім'я поля",
+                "okText": "Додати",
+                "cancelText": "Відміна"
+            }
+        }
+    },
+    "types": {
+        "number": "число",
+        "string": "строка",
+        "array": "масив",
+        "object": "об'єкт"
+    }
+}

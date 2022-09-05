@@ -1,5 +1,6 @@
 import { FC, useState } from "react";
 import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
+import { useTranslate } from "../../../i18n-js";
 
 import { FieldDescription, FieldType } from "../../types";
 import FieldTypeSelect from "./FieldTypeSelect";
@@ -13,6 +14,7 @@ type Props = {
 const TypeDescriptor: FC<Props> = ({ field, handleChange, disabledTypeChanging }) => {
     const [newFieldName, setNewFieldName] = useState('')
     const [show, setShow] = useState(false)
+    const i18n = useTranslate()
 
     const closeModal = () => setShow(false)
     const openModal = () => {
@@ -98,7 +100,9 @@ const TypeDescriptor: FC<Props> = ({ field, handleChange, disabledTypeChanging }
                                                     fieldTypes
                                                 })
                                             }
-                                        }>Remove</Button>
+                                        }>
+                                            {i18n.t('document-types.submodules.create.form.removeField')}
+                                        </Button>
                                     </Col>
                                 </Row>
                             </Container>
@@ -106,22 +110,30 @@ const TypeDescriptor: FC<Props> = ({ field, handleChange, disabledTypeChanging }
                     )}
                     <Modal show={show} onHide={closeModal}>
                         <Modal.Header>
-                            <Modal.Title>Adder Modal</Modal.Title>
+                            <Modal.Title>
+                                {i18n.t('document-types.submodules.create.addFieldModal.title')}
+                            </Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                             <Form.Group>
                                 <Form.Label>
-                                    Field Name
+                                    {i18n.t('document-types.submodules.create.addFieldModal.fieldName')}
                                 </Form.Label>
                                 <Form.Control value={newFieldName} onChange={(e) => setNewFieldName(e.currentTarget.value)}/>
                             </Form.Group>
                         </Modal.Body>
                         <Modal.Footer>
-                            <Button variant="success" onClick={handleAddField(field)}>Add</Button>
-                            <Button variant="danger" onClick={closeModal}>Cancel</Button>
+                            <Button variant="success" onClick={handleAddField(field)}>
+                                {i18n.t('document-types.submodules.create.addFieldModal.okText')}
+                            </Button>
+                            <Button variant="danger" onClick={closeModal}>
+                                {i18n.t('document-types.submodules.create.addFieldModal.cancelText')}
+                            </Button>
                         </Modal.Footer>
                     </Modal>
-                    <Button variant="success" className="m-1" size="sm" onClick={openModal}>Add field</Button>
+                    <Button variant="success" className="m-1" size="sm" onClick={openModal}>
+                        {i18n.t('document-types.submodules.create.form.addField')}
+                    </Button>
                 </Container>
             )
         default: {

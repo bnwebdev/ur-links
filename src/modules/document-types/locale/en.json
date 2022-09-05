@@ -1,0 +1,34 @@
+{
+    "navLink": "Document Types",
+    "createLink": "Create Type",
+    "removeModal": {
+        "title": "Remove {{name}}",
+        "question": "You would like to remove this type. Are you sure?",
+        "okText": "Yes",
+        "cancelText": "No"
+    },
+    "removeType": "Remove",
+    "submodules": {
+        "create": {
+            "form": {
+                "name": "Document type name",
+                "fieldsInDocument": "Fields in document",
+                "addField": "Add field",
+                "submit": "Create new type",
+                "removeField": "Remove"
+            },
+            "addFieldModal": {
+                "title": "Adder Modal",
+                "fieldName": "Field name",
+                "okText": "Add",
+                "cancelText": "Cancel"
+            }
+        }
+    },
+    "types": {
+        "number": "number",
+        "string": "string",
+        "array": "array",
+        "object": "object"
+    }
+}

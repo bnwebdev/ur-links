@@ -1,10 +1,14 @@
 import { FC } from "react";
+import { useTranslate } from "../../i18n-js";
 
-const Info: FC = () => (
-<>
-  <h1>Info</h1>
-  <p>You can do something with links (adding, holding, formatting, printing)</p>
-  <p>If you have some ideas, write me here ...</p>
-</>)
+const Info: FC = () => {
+  const i18n = useTranslate()
+
+  return <>
+    <p>{i18n.t('info.whyHasItMade')}</p>
+    <p>{i18n.t('info.whatCanYouDo')}</p>
+    <p>{i18n.t('info.ourWhishes')}</p>
+  </>
+}
 
 export default Info;
