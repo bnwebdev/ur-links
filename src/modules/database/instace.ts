@@ -1,6 +1,6 @@
 import { AppDexie } from "./AppDexie"
 
-let db: AppDexie | null
+let db: AppDexie | null = null;
 
 export const getMaybeDatabase = (): AppDexie | null => db
 

@@ -1,15 +1,20 @@
-import { FC } from "react";
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { FC, ReactElement } from "react";
+import { HashRouter, Route, RouteProps, Routes } from "react-router-dom";
 
 import { Error404, Layout } from "./components";
-import RootModule from "./modules";
+import { NavItem } from "./types";
 
-const App: FC = () => {
+type Props = {
+  navItems: NavItem[]
+  routes: ReactElement<RouteProps>[]
+}
+
+const App: FC<Props> = ({ navItems, routes }) => {
   return (
     <HashRouter>
       <Routes>
-        <Route path="/" element={<Layout navItems={RootModule.navItems} />}>
-          {RootModule.routes}
+        <Route path="/" element={<Layout navItems={navItems} />}>
+          {routes}
         </Route>
         <Route path="*" element={<Error404 />} />
       </Routes>
