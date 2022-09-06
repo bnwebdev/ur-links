@@ -15,7 +15,7 @@ const renderNavItem = (i18n: I18n, navItem: NavItem) => {
         const { label, children } = navItem
 
         return (
-            <NavDropdown title={i18n.t(label)}>
+            <NavDropdown menuVariant="dark" title={i18n.t(label)}>
                 {children.map(({ to, label}) => (
                     <LinkContainer to={to} key={to}>
                         <NavDropdown.Item>{i18n.t(label)}</NavDropdown.Item>
