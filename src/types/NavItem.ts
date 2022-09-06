@@ -1,5 +1,11 @@
-export type NavItem = {
+export type PlainNavItem = {
   to: string
   label: string
-  children?: NavItem[]
 }
+
+export type ComplexNavItem = {
+  label: string
+  children: PlainNavItem[]
+}
+
+export type NavItem = PlainNavItem | ComplexNavItem

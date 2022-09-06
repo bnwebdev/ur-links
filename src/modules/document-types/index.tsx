@@ -12,7 +12,13 @@ export default new Module(
       documentTypes: '++id, name, fieldTypes'
     },
     route: [<Route path='/document-types' element={<DocumentTypes />} />],
-    navItem: [{ to: '/document-types', label: 'document-types.navLink' }],
+    navItem: [{
+      label: 'document-types.dropdownTitle', 
+      children: [
+        { to: '/document-types', label: 'document-types.navLink' },
+        { to: '/document-types/create', label: 'document-types.submodules.create.navLink' }
+      ]
+    }],
     localization: [{ namespace: 'document-types', resources }],
   },
   create,

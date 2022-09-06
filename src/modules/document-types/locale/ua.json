@@ -1,6 +1,6 @@
 {
-    "navLink": "Типи Документів",
-    "createLink": "Створити Тип",
+    "navLink": "Всі типи",
+    "dropdownTitle": "Типи Документів",
     "removeModal": {
         "title": "Видалити {{name}}",
         "question": "Ви збираєтесь видалити цей тип. Ви впевнені?",
@@ -22,7 +22,8 @@
                 "fieldName": "Ім'я поля",
                 "okText": "Додати",
                 "cancelText": "Відміна"
-            }
+            },
+            "navLink": "Створити Тип"
         }
     },
     "types": {
