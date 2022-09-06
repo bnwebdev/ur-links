@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
-import { useTranslate } from "../../../i18n-js";
+import { useTranslate } from "../../../../module-core/i18n-js";
 
 import { FieldDescription, FieldType } from "../../types";
 import FieldTypeSelect from "./FieldTypeSelect";

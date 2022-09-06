@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Container, Form, Nav, Navbar } from "react-bootstrap";
 import { LinkContainer } from 'react-router-bootstrap'
-import { useLocale, useSupportedLocales, useTranslate } from "../modules/i18n-js";
+import { useLocale, useSupportedLocales, useTranslate } from "../module-core/i18n-js";
 
 import { NavItem } from "../types";
 

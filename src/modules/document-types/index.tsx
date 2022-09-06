@@ -1,5 +1,5 @@
 import { Route } from "react-router-dom";
-import { Module } from "../../module-core";
+import { Module } from "../../module-core/module";
 import { DocumentTypes } from "./components";
 import create from "./create";
 import resources from "./locale";

@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Form } from "react-bootstrap";
-import { useTranslate } from "../../../i18n-js";
+import { useTranslate } from "../../../../module-core/i18n-js";
 
 import { FieldType } from "../../types";
 

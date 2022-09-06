@@ -1,4 +1,4 @@
-import { Module } from "../../module-core";
+import { Module } from "../module";
 
 import { AppDexie } from "./AppDexie";
 import { useDatabaseInstance } from "./instace";

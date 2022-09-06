@@ -1,7 +1,7 @@
 import { Route } from "react-router-dom";
 import resources from './locale'
 
-import { Module } from "../../module-core";
+import { Module } from "../../module-core/module";
 import { ListLinks } from "./list";
 
 export * from './types'

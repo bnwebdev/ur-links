@@ -2,8 +2,8 @@ import { fold } from "fractal-objects"
 import { cloneElement, ReactElement } from "react"
 import { RouteProps } from "react-router-dom"
 
-import { StoresDescription } from "../modules/database"
-import { AppContext, AppCreateHandler, BeforeAppCreateHandler, Localization, NavItem } from "../types"
+import { StoresDescription } from "../database"
+import { AppContext, AppCreateHandler, BeforeAppCreateHandler, Localization, NavItem } from "../../types"
 import { CoreModule } from "./CoreModule"
 
 export interface ModuleShape {

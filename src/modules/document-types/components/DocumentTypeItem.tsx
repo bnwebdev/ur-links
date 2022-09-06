@@ -2,7 +2,7 @@ import { I18n } from "i18n-js/typings";
 import { FC, ReactNode } from "react";
 import { Button, Card, Col, Modal, Row } from "react-bootstrap";
 import { useModal } from "../../common/hooks/useModal";
-import { useTranslate } from "../../i18n-js";
+import { useTranslate } from "../../../module-core/i18n-js";
 
 import { DocumentType, FieldDescription, FieldType } from "../types";
 

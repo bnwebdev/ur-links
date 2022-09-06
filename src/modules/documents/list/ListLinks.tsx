@@ -1,5 +1,5 @@
-import { useDexie } from "../../database";
-import { useTranslate } from "../../i18n-js";
+import { useDexie } from "../../../module-core/database";
+import { useTranslate } from "../../../module-core/i18n-js";
 
 const ListLinks = () => {
   const documents = useDexie((db) => db.documents.toArray())

@@ -2,8 +2,8 @@ import { IndexableType } from "dexie";
 import { FC, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { useLazyDexie } from "../../../database";
-import { useTranslate } from "../../../i18n-js";
+import { useLazyDexie } from "../../../../module-core/database";
+import { useTranslate } from "../../../../module-core/i18n-js";
 
 import { DocumentType, FieldType, ObjectFieldDescription } from "../../types";
 import TypeDescriptor from "./TypeDescriptor";

@@ -1,6 +1,6 @@
 import { Route } from "react-router-dom";
 
-import { Module } from "../../module-core";
+import { Module } from "../../module-core/module";
 import { Info } from "./components";
 import resources from "./locale";
 
