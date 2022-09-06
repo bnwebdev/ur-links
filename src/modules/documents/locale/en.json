@@ -1,3 +1,12 @@
 {
-    "navLink": "Documents"
+    "dropdownTitle": "Documents",
+    "navLink": "All documents",
+    "submodules": {
+        "create": {
+            "navLink": "Create document",
+            "cantCreateDocument": "You can't create a document.",
+            "needOneDocumentTypeAtLeast": "You need to make up at least one document type.",
+            "chooseType": "Choose document type"
+        }
+    }
 }

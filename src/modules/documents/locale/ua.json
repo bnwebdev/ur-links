@@ -1,3 +1,12 @@
 {
-    "navLink": "Документи"
+    "dropdownTitle": "Документи",
+    "navLink": "Всі документи",
+    "submodules": {
+        "create": {
+            "navLink": "Створити документ",
+            "cantCreateDocument": "Ви не можете створювати документи без типів.",
+            "needOneDocumentTypeAtLeast": "Вам потрібно створити щонайменше 1 тип документів.",
+            "chooseType": "Оберіть тип документу"
+        }
+    }
 }
