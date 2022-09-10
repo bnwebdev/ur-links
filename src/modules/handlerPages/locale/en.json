@@ -1,0 +1,14 @@
+{
+    "notImplemented": {
+        "errorName": "Not Implemented",
+        "info": "We want to show you this will be in future!",
+        "backToHome": "Back To Home",
+        "Back": "Back"
+    },
+    "error404": {
+        "errorName": "Error 404",
+        "info": "Page is not found",
+        "backToHome": "Back To Home",
+        "back": "Back"
+    }
+}

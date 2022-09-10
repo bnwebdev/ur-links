@@ -1,4 +1,4 @@
-import { Button, ListGroup, Nav } from "react-bootstrap";
+import { ListGroup } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useDexie } from "../../../module-core/database";
 import { useTranslate } from "../../../module-core/i18n-js";
@@ -24,7 +24,7 @@ const ListLinks = () => {
     <ListGroup defaultActiveKey="#link1">
       {documents.map(
         ({ id, type }) => 
-          <LinkContainer key={id} to={`/documents/${id}`}>
+          <LinkContainer key={id} to={`/not-implemented`}>
             <ListGroup.Item action>
               Document with id #{id} and with type {typeNames.get(type)}
             </ListGroup.Item>

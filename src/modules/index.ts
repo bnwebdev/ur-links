@@ -5,6 +5,7 @@ import common from "./common";
 import info from "./info";
 import documents from "./documents";
 import documentTypes from "./document-types";
+import handlerPages from "./handlerPages";
 
 export default new Module(
   documents,
@@ -13,4 +14,5 @@ export default new Module(
   common,
   database,
   i18nJs,
+  handlerPages,
 )
