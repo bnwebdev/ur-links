@@ -1,127 +1,156 @@
 import { FC, useEffect, useMemo, useState } from "react";
-import { Button, Form, Table } from "react-bootstrap";
+import { Button, Form, Spinner, Table } from "react-bootstrap";
 import { useLazyDexie } from "../../../../module-core/database";
 import { useTranslate } from "../../../../module-core/i18n-js";
-import { ArrayTypeDescription, RootType, TypeDescription } from "../../../../RootFactory/types";
+import {
+    ArrayTypeDescription,
+    NumberTypeDescription,
+    ObjectTypeDescription,
+    RootType,
+    StringTypeDescription,
+    TypeDescription
+} from "../../../../RootFactory/types";
+import { delay } from "../../../common";
 import { DocumentType, useValidationSchema } from "../../../document-types";
 import { Document } from "../../types";
 
-type TypeDescriptionProps<T extends any = any> = {
+const getInitialValue = (description: TypeDescription): any => {
+   const { type } = description
+   switch (type) {
+        case RootType.NUMBER:
+        case RootType.STRING:
+            return undefined
+        case RootType.ARRAY:
+            return []
+        case RootType.OBJECT:
+            return Object.fromEntries(
+                Object.entries(description.fieldTypes)
+                    .map(([key, type]) => [key, getInitialValue(type) as any])
+            )
+   } 
+}
+
+type ChangeHandler<T> = (value: T) => void
+
+interface TypeDescriptionProps<T extends any = any> {
     typeDescription: TypeDescription
-    handleChange: (value: T) => void
+    handleChange: ChangeHandler<T>
     value: T
 }
 
-const TypeDescriptionInput: FC<TypeDescriptionProps> = (props) => {
-    const { typeDescription, handleChange } = props
-    let { value } = props
+interface StringInputProps extends TypeDescriptionProps<string | undefined> {
+    typeDescription: StringTypeDescription
+}
 
+const StringInput: FC<StringInputProps> = ({ handleChange, value }) => (
+    <Form.Group>
+        <Form.Control
+            value={value || ''} 
+            onChange={({ currentTarget: { value } }) => handleChange(value)}
+        />
+    </Form.Group>
+)
+
+interface NumberInputProps extends TypeDescriptionProps<number | undefined> {
+    typeDescription: NumberTypeDescription
+}
+
+const NumberInput: FC<NumberInputProps> = ({ handleChange, value }) => (
+    <Form.Group>
+        <Form.Control
+            type="number"
+            value={value || ''}
+            onChange={({ currentTarget: { value } }) => handleChange(value !== '' ? Number(value): undefined )}
+        />
+    </Form.Group>
+)
+
+interface ArrayInputProps extends TypeDescriptionProps<any[]> {
+    typeDescription: ArrayTypeDescription
+}
+
+const ArrayInput: FC<ArrayInputProps> = ({ handleChange, typeDescription, value: array }) => {
+
+    const changeHandlers = useMemo(() => array.map((_, idx) => 
+        (newValue: any) => {
+            const copy = [...array]
+            copy[idx] = newValue
+            handleChange(copy)
+        }),
+        [array]
+    )
+
+    return <Form.Group>
+        {(array).map((item, idx) =>(
+                <TypeDescriptionInput
+                    key={typeDescription.type + idx}
+                    handleChange={changeHandlers[idx]}
+                    typeDescription={typeDescription.itemType}
+                    value={item}
+                />)
+            )
+        }
+        <Button variant="success" size="sm" onClick={() => handleChange([...array, getInitialValue(typeDescription.itemType)])} >+</Button>
+    </Form.Group>
+}
+
+interface ObjectInputProps extends TypeDescriptionProps<Record<string, any>> {
+    typeDescription: ObjectTypeDescription
+}
+
+const ObjectInput: FC<ObjectInputProps> = ({ handleChange, typeDescription, value: object }) => {
     const i18n = useTranslate()
-    const onAddArrayItem = () => {
-        const item = (typeDescription as ArrayTypeDescription).itemType 
-        if (!(value instanceof Array)) {
-            value = []
-        }
-        let newItem
-        switch (item.type) {
-            case RootType.NUMBER:
-                newItem = 0
-                break
-            case RootType.STRING:
-                newItem = ''
-                break
-            case RootType.ARRAY:
-                newItem = []
-                break
-            case RootType.OBJECT:
-                newItem = {}
-                break
-        }
 
-        handleChange([...value, newItem])
-    }
-    
+    const changeHandlers = useMemo(() => {
+        return Object.fromEntries(
+            Object.keys(typeDescription.fieldTypes)
+                .map((typeName) => {
+                    return [typeName, (newValue: any) => {
+                        const copy = { ...object }
+                        copy[typeName] = newValue
+                        handleChange(copy)
+                    }]
+                })
+        )
+    }, [object, typeDescription.fieldTypes])
+
+    return <Table bordered hover className="m-0">
+        <thead className="table-dark">
+            <tr>
+                <th scope="col">{i18n.t('documents.submodules.create.objectTable.fieldName')}</th>
+                <th scope="col">{i18n.t('documents.submodules.create.objectTable.fieldValue')}</th>
+            </tr>
+        </thead>
+        <tbody>
+        {Object.entries(typeDescription.fieldTypes).map(
+            ([ typeName, typeDescription]) =>
+            <tr key={typeName}>
+                <th scope="row">{typeName}</th>
+                <td className={typeDescription.type === RootType.OBJECT ? "p-0" : ""}>
+                    <TypeDescriptionInput 
+                        typeDescription={typeDescription}
+                        handleChange={changeHandlers[typeName]}
+                        value={object[typeName]}
+                    />
+                </td>
+            </tr>
+        )}
+        </tbody>
+    </Table>
+}
+
+const TypeDescriptionInput: FC<TypeDescriptionProps> = (props) => {
+    const { typeDescription, handleChange, value } = props
+
     switch (typeDescription.type) {
         case RootType.STRING:
-            return (
-                <Form.Group>
-                    <Form.Control
-                        value={value} 
-                        onChange={({ currentTarget: { value } }) => handleChange(value)}
-                    />
-                </Form.Group>
-            )
+            return <StringInput value={value} handleChange={handleChange} typeDescription={typeDescription} />
         case RootType.NUMBER:
-            return (
-                <Form.Group>
-                    <Form.Control
-                        type="number"
-                        value={value}
-                        onChange={({ currentTarget: { value } }) => handleChange(value !== '' ? Number(value): value )}
-                    />
-                </Form.Group>
-            )
+            return <NumberInput value={value} handleChange={handleChange} typeDescription={typeDescription} />
         case RootType.ARRAY:
-            if (!(value instanceof Array)) {
-                value = []
-            }
-            return (
-                <Form.Group>
-                    {(value as Array<any>).map(
-                        (item, idx) =>(
-                            <TypeDescriptionInput
-                                key={typeDescription.type + idx}
-                                value={item}
-                                handleChange={(newValue) => {
-                                    const copy = [...value]
-                                    copy[idx] = newValue
-                                    handleChange(copy)
-                                }}
-                                typeDescription={typeDescription.itemType}
-                            />)
-                        )
-                    }
-                    <Button variant="success" size="sm" onClick={onAddArrayItem} >+</Button>
-                </Form.Group>
-            )
+            return <ArrayInput value={value} handleChange={handleChange} typeDescription={typeDescription} />
         case RootType.OBJECT:
-            if (value === null || typeof value !== 'object') {
-                value = Object.fromEntries(
-                    Object.entries(typeDescription.fieldTypes)
-                        .map(([key]) => [key])
-                )
-            }
-            return (<>
-            <Table bordered hover className="m-0">
-                <thead className="table-dark">
-                    <tr>
-                        <th scope="col">{i18n.t('documents.submodules.create.objectTable.fieldName')}</th>
-                        <th scope="col">{i18n.t('documents.submodules.create.objectTable.fieldValue')}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {Object.entries(typeDescription.fieldTypes).map(
-                    ([ typeName, typeDescription]) =>
-                    <tr key={typeName}>
-                        <th scope="row">{typeName}</th>
-                        <td className={typeDescription.type === RootType.OBJECT ? "p-0" : ""}>
-                            <TypeDescriptionInput 
-                                typeDescription={typeDescription}
-                                handleChange={(newValue) => {
-                                    const copy = { ...value }
-                                    copy[typeName] = newValue
-                                    handleChange(copy)
-                                } }
-                                value={value[typeName]}
-                                key={typeName} 
-                            />
-                        </td>
-                    </tr>
-                )}
-                </tbody>
-            </Table>
-            </>
-            )
+            return <ObjectInput value={value} handleChange={handleChange} typeDescription={typeDescription} />
         default:
             throw new Error(`Undefined type`)
     }
@@ -139,42 +168,53 @@ const DocumentMakerForm: FC<Props> = ({ documentType }) => {
         type: RootType.OBJECT,
         fieldTypes: documentType.fieldTypes
     }), [documentType])
+
     const [saveDocument] = useLazyDexie<unknown, [Document]>((db, document) => db.documents.add(document))
     const validationSchema = useValidationSchema(typeDescription)
 
-    const [document, setDocument] = useState<Document>({} as Document)
+    const [document, setDocument] = useState<Document>(getInitialValue(typeDescription))
+    const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
 
     useEffect(() => {
-        setDocument({} as Document)
-    }, [documentType])
+        setDocument(getInitialValue(typeDescription))
+    }, [typeDescription])
+
 
     const handleSubmit = async () => {
         try {
             setError('')
+            setLoading(true)
             await validationSchema.validateAsync(document)
+            await delay(500)
             await saveDocument({
                 meta: document,
                 type: documentType.id,
             })
-            setDocument({} as Document)
+            setDocument(getInitialValue(typeDescription))
         } catch (err) {
             setError((err as Error).message)
+        } finally {
+            setLoading(false)
         }
     }
 
-    return <Form onSubmit={handleSubmit}>
-        <TypeDescriptionInput
-            typeDescription={typeDescription}
-            value={document}
-            handleChange={setDocument}
-        />
-        <br />
-        { error ? <h3 className="text-danger">{error}</h3>: null}
-        <Button variant="success" type="submit">
-            {i18n.t('documents.submodules.create.saveDocument')}
-        </Button>  
-    </Form>
+    return <>
+        <Form onSubmit={handleSubmit}>
+            <TypeDescriptionInput
+                typeDescription={typeDescription}
+                handleChange={setDocument}
+                value={document}
+                />
+            <br />
+            { error ? <h3 className="text-danger">{error}</h3>: null}
+            <Button variant="success" type="submit" disabled={loading}>
+                {!loading && i18n.t('documents.submodules.create.saveDocument')}
+                {loading && <Spinner animation="border" size="sm" as="span"/>}
+                {loading && ' Loading'}
+            </Button>  
+        </Form>
+    </>
 }
 
 export default DocumentMakerForm
