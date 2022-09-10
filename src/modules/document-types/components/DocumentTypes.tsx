@@ -1,9 +1,7 @@
 import { FC } from "react";
-import { Button } from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
 
-import { useDexie, useLazyDexie } from "../../database";
-import { useTranslate } from "../../i18n-js";
+import { useDexie, useLazyDexie } from "../../../module-core/database";
+import { useTranslate } from "../../../module-core/i18n-js";
 import { DocumentType } from "../types";
 import DocumentTypeList from "./DocumentTypeList";
 
@@ -23,9 +21,6 @@ const DocumentTypes: FC = () => {
             ? <DocumentTypeList {...{ documentTypes, handleRemove }} /> 
             : <h1>{i18n.t('common.nothing')}</h1>
         }
-        <LinkContainer to="/document-types/create">
-            <Button>{i18n.t('document-types.createLink')}</Button>
-        </LinkContainer>
     </>)
 }
 

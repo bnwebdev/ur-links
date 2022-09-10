@@ -2,17 +2,18 @@ import { IndexableType } from "dexie";
 import { FC, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { useLazyDexie } from "../../../database";
-import { useTranslate } from "../../../i18n-js";
+import { useLazyDexie } from "../../../../module-core/database";
+import { useTranslate } from "../../../../module-core/i18n-js";
+import { ObjectTypeDescription, RootType } from "../../../../RootFactory/types";
 
-import { DocumentType, FieldType, ObjectFieldDescription } from "../../types";
+import { DocumentType } from "../../types";
 import TypeDescriptor from "./TypeDescriptor";
 
 const CreateDocumentType: FC = () => {
     const i18n = useTranslate()
 
     const { register, handleSubmit, reset } = useForm<{ name: string }>()
-    const [fields, setFields] = useState<ObjectFieldDescription>({ type: FieldType.OBJECT, fieldTypes: {} })
+    const [fields, setFields] = useState<ObjectTypeDescription>({ type: RootType.OBJECT, fieldTypes: {} })
     
     const [addDocType] = useLazyDexie<IndexableType, [DocumentType]>((db, docType) => db.documentTypes.add(docType))
 
@@ -21,7 +22,7 @@ const CreateDocumentType: FC = () => {
             name,
             fieldTypes: fields.fieldTypes
         })
-        setFields({ type: FieldType.OBJECT, fieldTypes: {} })
+        setFields({ type: RootType.OBJECT, fieldTypes: {} })
         reset({ name: '' })
     }
 

@@ -1,6 +1,6 @@
 {
-    "navLink": "Document Types",
-    "createLink": "Create Type",
+    "navLink": "All types",
+    "dropdownTitle": "Document Types",
     "removeModal": {
         "title": "Remove {{name}}",
         "question": "You would like to remove this type. Are you sure?",
@@ -22,7 +22,8 @@
                 "fieldName": "Field name",
                 "okText": "Add",
                 "cancelText": "Cancel"
-            }
+            },
+            "navLink": "Create Type"
         }
     },
     "types": {

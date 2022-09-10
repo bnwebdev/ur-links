@@ -1,6 +1,7 @@
+import { DocumentType } from "../document-types";
+
 export interface Document {
   id?: number;
-  title: string;
-  authors: number[];
+  type: DocumentType['id'];
   meta: Record<string, any>;
 }

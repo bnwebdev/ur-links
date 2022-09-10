@@ -1,4 +1,4 @@
-import { Module } from "../../module-core";
+import { Module } from "../module";
 import { initialize } from "./instance";
 
 export * from './hooks'

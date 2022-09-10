@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { useTranslate } from "../../i18n-js";
+import { useTranslate } from "../../../module-core/i18n-js";
 
 const Info: FC = () => {
   const i18n = useTranslate()
