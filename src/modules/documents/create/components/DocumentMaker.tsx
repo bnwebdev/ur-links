@@ -16,7 +16,7 @@ const DocumentMaker: FC = () => {
             if (selectedTypeId === undefined || !documentTypes) {
                 return null
             }
-
+            
             const candidate = documentTypes.find(({ id }) => id === selectedTypeId)
 
             return candidate || null
@@ -46,6 +46,7 @@ const DocumentMaker: FC = () => {
             <option value=''>{i18n.t('documents.submodules.create.chooseType')}</option>
             {documentTypes.map(({ id, name }) => <option value={id} key={id}>{name}</option>)}
         </Form.Select>
+        <br />
         {selectedDocumentType ? <DocumentMakerForm documentType={selectedDocumentType}/> : null}
     </>
     )

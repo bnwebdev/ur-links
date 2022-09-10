@@ -6,7 +6,12 @@
             "navLink": "Create document",
             "cantCreateDocument": "You can't create a document.",
             "needOneDocumentTypeAtLeast": "You need to make up at least one document type.",
-            "chooseType": "Choose document type"
+            "chooseType": "Choose document type",
+            "objectTable": {
+                "fieldName": "Field's Name",
+                "fieldValue": "Field's Value"
+            },
+            "saveDocument": "Save Document"
         }
     }
 }

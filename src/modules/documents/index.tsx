@@ -20,7 +20,7 @@ export default new Module(
         ],
         route: [<Route path="/" element={<ListLinks />} />],
         storeDescription: {
-            documents: '++id, type, name, authors, meta'
+            documents: '++id, type, meta'
         },
         localization: [{ namespace: 'documents', resources }]
     },

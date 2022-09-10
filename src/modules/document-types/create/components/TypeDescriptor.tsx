@@ -1,13 +1,13 @@
 import { FC, useState } from "react";
 import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
 import { useTranslate } from "../../../../module-core/i18n-js";
+import { RootType, TypeDescription } from "../../../../RootFactory/types";
 
-import { FieldDescription, FieldType } from "../../types";
-import FieldTypeSelect from "./FieldTypeSelect";
+import TypeSelect from "./TypeSelect";
 
 type Props = {
-    field: FieldDescription;
-    handleChange: (updatedField: FieldDescription) => void;
+    field: TypeDescription;
+    handleChange: (updatedField: TypeDescription) => void;
     disabledTypeChanging?: boolean;
 }
   
@@ -22,48 +22,48 @@ const TypeDescriptor: FC<Props> = ({ field, handleChange, disabledTypeChanging }
         setShow(true)
     }
 
-    const handleAddField = (field: FieldDescription & { type: FieldType.OBJECT }) => () => {
+    const handleAddField = (field: TypeDescription & { type: RootType.OBJECT }) => () => {
         newFieldName.length && handleChange({
             ...field, 
             fieldTypes: {
                 ...field.fieldTypes, 
-                [newFieldName]: { type: FieldType.STRING }
+                [newFieldName]: { type: RootType.STRING }
             }
         })
 
         closeModal()
     }
 
-    const changeTypeHandler = (type: FieldType) => {
+    const changeTypeHandler = (type: RootType) => {
         if (field.type === type) return;
         
-        let newFieldDescription: FieldDescription; 
+        let newTypeDescription: TypeDescription; 
         
-        if (type === FieldType.ARRAY) {
-            newFieldDescription = { type, itemType: { type: FieldType.STRING } }
-        } else if (type === FieldType.OBJECT) {
-            newFieldDescription = { type, fieldTypes: {} }
+        if (type === RootType.ARRAY) {
+            newTypeDescription = { type, itemType: { type: RootType.STRING } }
+        } else if (type === RootType.OBJECT) {
+            newTypeDescription = { type, fieldTypes: {} }
         } else {
-            newFieldDescription = { type };
+            newTypeDescription = { type };
         }
 
-        handleChange(newFieldDescription)
+        handleChange(newTypeDescription)
     }
 
     switch (field.type) {
-        case FieldType.STRING:
-        case FieldType.NUMBER:
+        case RootType.STRING:
+        case RootType.NUMBER:
             return (
             <Container fluid>
-                <FieldTypeSelect disabled={disabledTypeChanging} currentType={field.type} handleSelect={changeTypeHandler} />
+                <TypeSelect disabled={disabledTypeChanging} currentType={field.type} handleSelect={changeTypeHandler} />
             </Container>
             )
-        case FieldType.ARRAY:
+        case RootType.ARRAY:
             return (
                 <Container fluid>
                     <Row>
                         <Col xs={3}>
-                            <FieldTypeSelect disabled={disabledTypeChanging} currentType={field.type} handleSelect={changeTypeHandler} />
+                            <TypeSelect disabled={disabledTypeChanging} currentType={field.type} handleSelect={changeTypeHandler} />
                         </Col>
                         <Col>
                             <TypeDescriptor field={field.itemType} handleChange={
@@ -73,10 +73,10 @@ const TypeDescriptor: FC<Props> = ({ field, handleChange, disabledTypeChanging }
                     </Row>
                 </Container>
             )
-        case FieldType.OBJECT:
+        case RootType.OBJECT:
             return (
                 <Container className="border p-2">
-                    <FieldTypeSelect disabled={disabledTypeChanging} currentType={field.type} handleSelect={changeTypeHandler} />
+                    <TypeSelect disabled={disabledTypeChanging} currentType={field.type} handleSelect={changeTypeHandler} />
                     <div className="mb-2"/>
                     {Object.keys(field.fieldTypes).map(
                         (key) => (

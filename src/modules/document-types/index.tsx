@@ -5,6 +5,7 @@ import create from "./create";
 import resources from "./locale";
 
 export * from './types';
+export * from './hooks';
 
 export default new Module(
   {
