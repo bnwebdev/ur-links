@@ -157,7 +157,7 @@ const DocumentMakerForm: FC<Props> = ({ documentType }) => {
                 meta: document,
                 type: documentType.id,
             })
-            setDocument({})
+            setDocument({} as Document)
         } catch (err) {
             setError((err as Error).message)
         }
