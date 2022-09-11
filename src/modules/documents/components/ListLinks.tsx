@@ -1,8 +1,10 @@
 import { useCallback, useState } from "react";
-import { Form, Table } from "react-bootstrap";
+import { Button, Form, Spinner, Table } from "react-bootstrap";
 import ReactJson from "react-json-view";
-import { useDexie } from "../../../module-core/database";
+import { LinkContainer } from "react-router-bootstrap";
+import { useDexie, useLazyDexie } from "../../../module-core/database";
 import { useTranslate } from "../../../module-core/i18n-js";
+import { delay, useLoading } from "../../common";
 
 const ListLinks = () => {
   const documents = useDexie((db) => db.documents.toArray())
@@ -14,6 +16,22 @@ const ListLinks = () => {
         )
       )
   )
+  
+  const [removing, setRemoving] = useState(false)
+  const [removingId, setRemovingId] = useState<number>()
+
+  const [removeDocument] = useLazyDexie<unknown, [number | undefined]>(async (db, id) => {
+    setRemovingId(id)
+    try {
+      await delay(1000)
+      await db.documents.where('id').equals(id as number).delete()
+    } catch (err) {
+      throw err
+    } finally {
+      setRemovingId(undefined)
+    }
+  })
+  const removeHandler = useLoading(removeDocument, setRemoving)
 
   const i18n = useTranslate()
 
@@ -28,10 +46,11 @@ const ListLinks = () => {
     return <h1>{i18n.t('common.nothing')}</h1>
   }
 
+  const getIsIAmRemoving = (id: number | undefined) => removing && removingId === id
 
   return (
-    <Table>
-      <thead>
+    <Table bordered striped>
+      <thead className="table-dark">
         <tr>
           <th>Id</th>
           <th>Document Type</th>
@@ -48,23 +67,38 @@ const ListLinks = () => {
               </Form.Group>
             )
           </th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
         {documents.filter(filterHandler).map(({ id, type, meta }) => 
-          <tr>
-            <td>#{id}</td>
-            <td>{typeNames.get(type)}</td>
+          <tr key={id}>
             <td>
+              <LinkContainer to="/not-implemented">
+                <a>#{id}</a>
+              </LinkContainer>
+            </td>
+            <td>{typeNames.get(type)}</td>
+            <td width={400}>
               <ReactJson
                 collapsed={collapsedMeta}
                 src={meta}
                 name={false} 
-                enableClipboard={false} 
-                style={{ width: 300 }}
+                enableClipboard={false}
                 displayDataTypes={false}
                 displayObjectSize={false}
-              /></td>
+              />
+            </td>
+            <td width={200}>
+              <Button
+                variant="danger"
+                disabled={removing && removingId === id}
+                onClick={() => removeHandler(id)}>
+                  { getIsIAmRemoving(id) && <Spinner animation="grow" size="sm" /> }
+                  { getIsIAmRemoving(id) && `Removing...` }
+                  { !getIsIAmRemoving(id) && `Remove` }
+              </Button>
+            </td>
           </tr>
         )}
       </tbody>
