@@ -77,7 +77,8 @@ const ArrayInput: FC<ArrayInputProps> = ({ handleChange, typeDescription, value:
             copy[idx] = newValue
             handleChange(copy)
         }),
-        [array]
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [array] 
     )
 
     return <Form.Group>
@@ -112,6 +113,7 @@ const ObjectInput: FC<ObjectInputProps> = ({ handleChange, typeDescription, valu
                     }]
                 })
         )
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [object, typeDescription.fieldTypes])
 
     return <Table bordered hover className="m-0">
