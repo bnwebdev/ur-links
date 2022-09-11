@@ -93,7 +93,9 @@ const ListLinks = () => {
               <Button
                 variant="danger"
                 disabled={removing && removingId === id}
-                onClick={() => removeHandler(id)}>
+                onClick={() => removeHandler(id)}
+                size="sm"
+              >
                   { getIsIAmRemoving(id) && <Spinner animation="grow" size="sm" /> }
                   { getIsIAmRemoving(id) && i18n.t('documents.table.removingAction') }
                   { !getIsIAmRemoving(id) && i18n.t('documents.table.removeAction') }
