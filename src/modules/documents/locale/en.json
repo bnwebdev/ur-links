@@ -13,5 +13,14 @@
             },
             "saveDocument": "Save Document"
         }
+    },
+    "table": {
+        "id": "ID",
+        "documentType": "Document Type",
+        "meta": "Meta",
+        "collapsed": "collapsed",
+        "actions": "Actions",
+        "removeAction": "Remove",
+        "removingAction": "Removing"
     }
 }

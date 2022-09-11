@@ -13,5 +13,14 @@
             },
             "saveDocument": "Зберегти Документ"
         }
+    },
+    "table": {
+        "id": "Айді",
+        "documentType": "Тип Документу",
+        "meta": "Дані",
+        "collapsed": "сгорнути",
+        "actions": "Дії",
+        "removeAction": "Видалити",
+        "removingAction": "Видаляється"
     }
 }
