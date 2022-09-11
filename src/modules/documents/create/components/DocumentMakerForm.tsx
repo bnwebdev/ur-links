@@ -1,4 +1,4 @@
-import { FC, FormEventHandler, useCallback, useEffect, useMemo, useState } from "react";
+import { FC, FormEventHandler, useCallback, useMemo, useState } from "react";
 import { Button, Form, Spinner, Table } from "react-bootstrap";
 import { useLazyDexie } from "../../../../module-core/database";
 import { useTranslate } from "../../../../module-core/i18n-js";
@@ -10,7 +10,7 @@ import {
     StringTypeDescription,
     TypeDescription
 } from "../../../../RootFactory/types";
-import { delay, useLoading } from "../../../common";
+import { delay, useLoading, useWithoutInitialEffect } from "../../../common";
 import { DocumentType, useValidationSchema } from "../../../document-types";
 import { Document } from "../../types";
 
@@ -182,7 +182,7 @@ const DocumentMakerForm: FC<Props> = ({ documentType }) => {
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
 
-    useEffect(() => {
+    useWithoutInitialEffect(() => {
         setDocument(getInitialValue(typeDescription))
     }, [typeDescription])
 
