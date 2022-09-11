@@ -1,4 +1,4 @@
-import { FC, FormEventHandler, useEffect, useMemo, useState } from "react";
+import { FC, FormEventHandler, useCallback, useEffect, useMemo, useState } from "react";
 import { Button, Form, Spinner, Table } from "react-bootstrap";
 import { useLazyDexie } from "../../../../module-core/database";
 import { useTranslate } from "../../../../module-core/i18n-js";
@@ -10,7 +10,7 @@ import {
     StringTypeDescription,
     TypeDescription
 } from "../../../../RootFactory/types";
-import { delay } from "../../../common";
+import { delay, useLoading } from "../../../common";
 import { DocumentType, useValidationSchema } from "../../../document-types";
 import { Document } from "../../types";
 
@@ -38,6 +38,7 @@ interface TypeDescriptionProps<T extends any = any> {
     value: T
 }
 
+// ================================= STRING =================================
 interface StringInputProps extends TypeDescriptionProps<string | undefined> {
     typeDescription: StringTypeDescription
 }
@@ -51,6 +52,7 @@ const StringInput: FC<StringInputProps> = ({ handleChange, value }) => (
     </Form.Group>
 )
 
+// ================================= NUMBER =================================
 interface NumberInputProps extends TypeDescriptionProps<number | undefined> {
     typeDescription: NumberTypeDescription
 }
@@ -65,6 +67,7 @@ const NumberInput: FC<NumberInputProps> = ({ handleChange, value }) => (
     </Form.Group>
 )
 
+// ================================= ARRAY =================================
 interface ArrayInputProps extends TypeDescriptionProps<any[]> {
     typeDescription: ArrayTypeDescription
 }
@@ -77,8 +80,7 @@ const ArrayInput: FC<ArrayInputProps> = ({ handleChange, typeDescription, value:
             copy[idx] = newValue
             handleChange(copy)
         }),
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [array] 
+        [array, handleChange]
     )
 
     return <Form.Group>
@@ -95,6 +97,7 @@ const ArrayInput: FC<ArrayInputProps> = ({ handleChange, typeDescription, value:
     </Form.Group>
 }
 
+// ================================= OBJECT =================================
 interface ObjectInputProps extends TypeDescriptionProps<Record<string, any>> {
     typeDescription: ObjectTypeDescription
 }
@@ -113,8 +116,7 @@ const ObjectInput: FC<ObjectInputProps> = ({ handleChange, typeDescription, valu
                     }]
                 })
         )
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [object, typeDescription.fieldTypes])
+    }, [object, typeDescription.fieldTypes, handleChange])
 
     return <Table bordered hover className="m-0">
         <thead className="table-dark">
@@ -141,6 +143,7 @@ const ObjectInput: FC<ObjectInputProps> = ({ handleChange, typeDescription, valu
     </Table>
 }
 
+// ================================= COMBINED =================================
 const TypeDescriptionInput: FC<TypeDescriptionProps> = (props) => {
     const { typeDescription, handleChange, value } = props
 
@@ -163,6 +166,7 @@ type Props = {
 }
 
 
+// ================================= FORM =================================
 const DocumentMakerForm: FC<Props> = ({ documentType }) => {
     const i18n = useTranslate()
 
@@ -174,21 +178,19 @@ const DocumentMakerForm: FC<Props> = ({ documentType }) => {
     const [saveDocument] = useLazyDexie<unknown, [Document]>((db, document) => db.documents.add(document))
     const validationSchema = useValidationSchema(typeDescription)
 
-    const [document, setDocument] = useState<Document>(getInitialValue(typeDescription))
-    const [loading, setLoading] = useState(false)
+    const [document, setDocument] = useState<Document>(() => getInitialValue(typeDescription))
     const [error, setError] = useState('')
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         setDocument(getInitialValue(typeDescription))
     }, [typeDescription])
 
-
-    const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+    const handleSubmitFn: FormEventHandler<HTMLFormElement> = useCallback(async (e) => {
         e.preventDefault()
 
         try {
             setError('')
-            setLoading(true)
             await validationSchema.validateAsync(document)
             await delay(500)
             await saveDocument({
@@ -198,10 +200,10 @@ const DocumentMakerForm: FC<Props> = ({ documentType }) => {
             setDocument(getInitialValue(typeDescription))
         } catch (err) {
             setError((err as Error).message)
-        } finally {
-            setLoading(false)
         }
-    }
+    }, [document, documentType, saveDocument, validationSchema, typeDescription])
+
+    const handleSubmit = useLoading(handleSubmitFn, setLoading)
 
     return <>
         <Form onSubmit={handleSubmit}>
