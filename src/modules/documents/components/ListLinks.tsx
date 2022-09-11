@@ -52,14 +52,14 @@ const ListLinks = () => {
     <Table bordered striped>
       <thead className="table-dark">
         <tr>
-          <th>Id</th>
-          <th>Document Type</th>
+          <th>{i18n.t('documents.table.id')}</th>
+          <th>{i18n.t('documents.table.documentType')}</th>
           <th className="d-flex">
-            Meta (
+            {i18n.t('documents.table.meta')} (
               <Form.Group>
                 <Form.Check
                   reverse
-                  label="collapsed"
+                  label={i18n.t('documents.table.collapsed')}
                   type="switch"
                   checked={collapsedMeta}
                   onChange={() => setCollapsedMeta(collapsed => !collapsed)}
@@ -67,7 +67,7 @@ const ListLinks = () => {
               </Form.Group>
             )
           </th>
-          <th>Actions</th>
+          <th>{i18n.t('documents.table.actions')}</th>
         </tr>
       </thead>
       <tbody>
@@ -95,8 +95,8 @@ const ListLinks = () => {
                 disabled={removing && removingId === id}
                 onClick={() => removeHandler(id)}>
                   { getIsIAmRemoving(id) && <Spinner animation="grow" size="sm" /> }
-                  { getIsIAmRemoving(id) && `Removing...` }
-                  { !getIsIAmRemoving(id) && `Remove` }
+                  { getIsIAmRemoving(id) && i18n.t('documents.table.removingAction') }
+                  { !getIsIAmRemoving(id) && i18n.t('documents.table.removeAction') }
               </Button>
             </td>
           </tr>
