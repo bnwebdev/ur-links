@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, FormEventHandler, useEffect, useMemo, useState } from "react";
 import { Button, Form, Spinner, Table } from "react-bootstrap";
 import { useLazyDexie } from "../../../../module-core/database";
 import { useTranslate } from "../../../../module-core/i18n-js";
@@ -181,7 +181,9 @@ const DocumentMakerForm: FC<Props> = ({ documentType }) => {
     }, [typeDescription])
 
 
-    const handleSubmit = async () => {
+    const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+        e.preventDefault()
+
         try {
             setError('')
             setLoading(true)
