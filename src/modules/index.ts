@@ -6,10 +6,12 @@ import info from "./info";
 import documents from "./documents";
 import documentTypes from "./document-types";
 import handlerPages from "./handlerPages";
+import formatters from "./formatters";
 
 export default new Module(
   documents,
   documentTypes,
+  formatters,
   info,
   common,
   database,
