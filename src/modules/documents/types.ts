@@ -1,4 +1,4 @@
-import { DocumentType } from "../document-types";
+import { DocumentType } from "../document-types/types";
 
 export interface Document {
   id?: number;
