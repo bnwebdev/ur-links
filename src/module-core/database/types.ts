@@ -1,4 +1,4 @@
-import { Table } from "dexie";
+import { Table, Transaction } from "dexie";
 import { Document } from "../../modules/documents/types";
 import { DocumentType } from '../../modules/document-types/types';
 import { Formatter } from "../../modules/formatters/types";
@@ -11,4 +11,14 @@ export interface AppDatabase {
     workAreas: Table<WorkArea>;
 }
 
-export type StoresDescription = Record<keyof AppDatabase, string>
+export type DexieUpgradeFn = (trans: Transaction) => void | PromiseLike<any>
+
+export type ObjectStoreMaker = {
+    upgrade?: DexieUpgradeFn
+    version?: number
+    store: string
+}
+
+export type StoreMaker = string | ObjectStoreMaker | (ObjectStoreMaker | string)[]
+
+export type StoresDescription = Record<keyof AppDatabase, StoreMaker>
