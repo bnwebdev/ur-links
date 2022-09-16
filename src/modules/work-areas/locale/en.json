@@ -1,5 +1,11 @@
 {
     "navLink": "Work Area",
     "createArea": "Create Work Area",
-    "header": "Work Areas"
+    "header": "Work Areas",
+    "createForm": {
+        "workAreaLabel": "Work Area Label",
+        "okText": "Save",
+        "cancelText": "Cancel",
+        "inputWorkAreaLabel": "Input work area label"
+    }
 }
