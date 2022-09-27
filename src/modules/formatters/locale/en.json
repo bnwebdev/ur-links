@@ -1,3 +1,9 @@
 {
-    "navLink": "Formatters"
+    "navLink": "All formatters",
+    "dropdownTitle": "Formatters",
+    "submodules": {
+        "create": {
+            "navLink": "Create formatter"
+        }
+    }
 }

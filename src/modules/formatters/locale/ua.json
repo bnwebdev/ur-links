@@ -1,3 +1,9 @@
 {
-    "navLink": "Оформлювачі"
+    "navLink": "Всі оформлювачі",
+    "dropdownTitle": "Оформлювачі",
+    "submodules": {
+        "create": {
+            "navLink": "Створити оформлювач"
+        }
+    }
 }

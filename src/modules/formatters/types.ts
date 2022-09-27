@@ -1,9 +1,10 @@
 import { DocumentType } from "../document-types/types"
 
-type AstTreeWithFormatFunction = string
+type FormatterCode = string
 
 export interface Formatter {
     id?: number;
     type: DocumentType['id'];
-    rules: AstTreeWithFormatFunction;
+    code: FormatterCode;
+    name: string;
 }
