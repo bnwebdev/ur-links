@@ -143,10 +143,16 @@ export abstract class ExpressionOperationBinary extends ExpressionOperation {
 
 export class ExpressionOperationBinaryAddition extends ExpressionOperationBinary {
     execute(context: Context): Runtime {
-        const lhs = Runtime.cast<RuntimeValueType<any>>(this.getLhs(context), Runtime.ValueType as any)
-        const rhs = Runtime.cast<RuntimeValueType<any>>(this.getRhs(context), Runtime.ValueType as any)
+        const lhs = this.getLhs(context)
+        const rhs = this.getRhs(context)
 
-        return new Runtime.Number(lhs.getValue() + rhs.getValue())
+        const lhsNumber = Runtime.tryCast(lhs, Runtime.Number)
+        const rhsNumber = Runtime.tryCast(rhs, Runtime.Number)
+        if (lhsNumber && rhsNumber) {
+            return new Runtime.Number(lhsNumber.getValue() + rhsNumber.getValue())
+        }
+
+        return new Runtime.String(lhs.toString() + rhs.toString())
     }
 
     toCode(): string {
@@ -199,7 +205,7 @@ export class ExpressionOperationBinaryEqual extends ExpressionOperationBinary {
             return new Runtime.Boolean(olhs === orhs)
         }
 
-        return new Runtime.Boolean(rawLhs.toString() === rawRhs.toString())
+        return new Runtime.Boolean(false)
     }
 
     toCode(): string {
