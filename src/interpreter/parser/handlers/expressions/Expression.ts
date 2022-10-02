@@ -1,8 +1,13 @@
-import { ExpressionOperationUnaryMinus, ExpressionOperationUnion, ExpressionPrimitiveBoolean, ExpressionPrimitiveNull } from "../../ast/expressions"
-import { UnaryOperationSymbol } from "../../constants"
-import { LexemType } from "../../lexer"
-import { ParseType } from "../constants"
-import { TypedHandler } from "./types"
+import {
+    ExpressionOperationUnaryMinus,
+    ExpressionOperationUnion,
+    ExpressionPrimitiveBoolean,
+    ExpressionPrimitiveNull
+} from "../../../ast/expressions"
+import { UnaryOperationSymbol } from "../../../constants"
+import { LexemType } from "../../../lexer"
+import { ParseType } from "../../constants"
+import { TypedHandler } from "../types"
 
 export const ExpressionHandler: TypedHandler = ({ current, handle, next, expectCurrent }) => {
     handle(ParseType.SPACE)

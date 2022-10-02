@@ -1,17 +1,18 @@
-import { AstNode } from "../../ast";
-import { StatementFunction, StatementIf, StatementPrint, StatementReturn } from "../../ast/statements";
-import { LexemType } from "../../lexer";
-import { ParseType } from "../constants";
-import { TypedHandler } from "./types";
-import { isTokenOneOf } from "./utils.ts";
+import { AstNode } from "../../../ast";
+import { StatementFunction, StatementPrint, StatementReturn } from "../../../ast/statements";
+import { LexemType } from "../../../lexer";
+import { ParseType } from "../../constants";
+import { TypedHandler } from "../types";
+import { isTokenOneOf } from "../utils.ts";
 
 export const StatementHandler: TypedHandler = ({ expectCurrent, next, current, handle }, stopers: LexemType[]) => {
     const { text } = expectCurrent(LexemType.KEYWORD)
-    next() // skip keyword
-    handle(ParseType.SPACE)
 
     switch (text) {
         case "print": {
+            next() // skip keyword
+            handle(ParseType.SPACE)
+
             const toPrints: AstNode[] = []
             for (
                 let token = current();
@@ -34,24 +35,11 @@ export const StatementHandler: TypedHandler = ({ expectCurrent, next, current, h
             handle(ParseType.SPACE)
             return new StatementPrint(toPrints)
         }
-        case "if": {
-            expectCurrent(LexemType.OPEN_PAREN)
-            next(); // skip (
-            const expr = handle(ParseType.ROOT_EXPRESSION, undefined, [LexemType.CLOSE_PAREN])
-            expectCurrent(LexemType.CLOSE_PAREN)
-            next() // skip )
-            handle(ParseType.SPACE) // skip spaces
-            expectCurrent(LexemType.OPEN_BRACES)
-            next() // skip open braces
-            handle(ParseType.SPACE) // skip spaces
-            const block = handle(ParseType.CODE_LIST, [LexemType.CLOSE_BRACES])
-            expectCurrent(LexemType.CLOSE_BRACES)
-            next() // skip close braces
+        case "if": return handle(ParseType.STATEMENT_IF);
+        case "function": {
+            next() // skip keyword
             handle(ParseType.SPACE)
 
-            return new StatementIf(expr, block)
-        }
-        case "function": {
             const { text: name } = expectCurrent(LexemType.VARIABEL)
             next() // skip name
             handle(ParseType.SPACE) // skip spaces
@@ -87,6 +75,8 @@ export const StatementHandler: TypedHandler = ({ expectCurrent, next, current, h
             return new StatementFunction(name, body, argNames)
         }
         case "return": {
+            next() // skip keyword
+            handle(ParseType.SPACE)
             const body = handle(ParseType.ROOT_EXPRESSION, undefined, stopers)
 
             return new StatementReturn(body)

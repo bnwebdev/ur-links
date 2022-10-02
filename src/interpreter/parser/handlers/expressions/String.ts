@@ -1,6 +1,6 @@
-import { ExpressionPrimitiveString } from "../../ast/expressions";
-import { LexemType } from "../../lexer";
-import { TypedHandler } from "./types";
+import { ExpressionPrimitiveString } from "../../../ast/expressions";
+import { LexemType } from "../../../lexer";
+import { TypedHandler } from "../types";
 
 export const StringHandler: TypedHandler = ({ expectCurrent, current, next }) => {
     expectCurrent(LexemType.QUOTES)

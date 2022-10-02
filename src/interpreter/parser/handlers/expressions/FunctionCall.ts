@@ -1,10 +1,10 @@
-import { AstNode } from "../../ast";
-import { ExpressionVariableAccess } from "../../ast/expressions";
-import { StatementFunctionCall } from "../../ast/statements";
-import { LexemType } from "../../lexer";
-import { ParseType } from "../constants";
-import { TypedHandler } from "./types";
-import { isTokenOneOf } from "./utils.ts";
+import { AstNode } from "../../../ast";
+import { ExpressionVariableAccess } from "../../../ast/expressions";
+import { StatementFunctionCall } from "../../../ast/statements";
+import { LexemType } from "../../../lexer";
+import { ParseType } from "../../constants";
+import { TypedHandler } from "../types";
+import { isTokenOneOf } from "../utils.ts";
 
 export const FunctionCallHandler: TypedHandler = ({ expectCurrent, next, current, handle }, name: string) => {
     expectCurrent(LexemType.OPEN_PAREN)

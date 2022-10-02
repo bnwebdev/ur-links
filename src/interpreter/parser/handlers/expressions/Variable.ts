@@ -1,8 +1,8 @@
-import { ExpressionVariableAccess } from "../../ast/expressions";
-import { LexemType } from "../../lexer";
-import { ParseType } from "../constants";
-import { TypedHandler } from "./types";
-import { isTokenOneOf } from "./utils.ts";
+import { ExpressionVariableAccess } from "../../../ast/expressions";
+import { LexemType } from "../../../lexer";
+import { ParseType } from "../../constants";
+import { TypedHandler } from "../types";
+import { isTokenOneOf } from "../utils.ts";
 
 export const VariableHandler: TypedHandler = ({ current, handle, expectCurrent, next }) => {
     const { text } = expectCurrent(LexemType.VARIABEL)

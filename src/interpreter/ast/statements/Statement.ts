@@ -83,6 +83,23 @@ export class StatementIf extends Statement {
         return `if (${this.condition.toCode()}) { ${this.action.toCode()} }`
     }
 }
+export class StatementIfElse extends Statement {
+    constructor(private condition: AstNode, private action: AstNode, private elseAction: AstNode) {
+        super()
+    }
+
+    execute(context: Context): Runtime {
+        if (this.condition.execute(context).toBoolean()) {
+            return this.action.execute(context)
+        } else {
+            return this.elseAction.execute(context)
+        }
+    }
+
+    toCode(): string {
+        return `if (${this.condition.toCode()}) { ${this.action.toCode()} } else { ${this.elseAction.toCode()} }`
+    }
+}
 
 export class StatementReturn extends Statement {
     constructor(private returnValue: AstNode) {

@@ -1,10 +1,10 @@
-import { AstNode } from "../../ast";
-import { ExpressionOperationBinary } from "../../ast/expressions";
-import { BinaryOperationSymbol } from "../../constants";
-import { LexemType } from "../../lexer";
-import { lessBinaryOperator } from "../../utils";
-import { ParseType } from "../constants";
-import { TypedHandler } from "./types";
+import { AstNode } from "../../../ast";
+import { ExpressionOperationBinary } from "../../../ast/expressions";
+import { BinaryOperationSymbol } from "../../../constants";
+import { LexemType } from "../../../lexer";
+import { lessBinaryOperator } from "../../../utils";
+import { ParseType } from "../../constants";
+import { TypedHandler } from "../types";
 
 export const BinaryOperationHandler: TypedHandler = ({ handle, current, expectCurrent, next }, lhs?: AstNode) => {
     if (!lhs) {

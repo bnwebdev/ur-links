@@ -47,7 +47,11 @@ export class Parser<TokenType extends string, CustomHandlerTypes extends string>
         function manager(): HandlerProps<TokenType, HandlerType<CustomHandlerTypes>> {
             return { current, next, handle, expectCurrent, show }
         }
-
-        return this.handlers.root(manager())
+        try {
+            return this.handlers.root(manager())
+        } catch (err) {
+            console.error('ParserError', current(), err)
+            throw err
+        }
     }
 }

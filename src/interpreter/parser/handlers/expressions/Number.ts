@@ -1,6 +1,6 @@
-import { ExpressionPrimitiveNumber } from "../../ast/expressions"
-import { LexemType } from "../../lexer"
-import { TypedHandler } from "./types"
+import { ExpressionPrimitiveNumber } from "../../../ast/expressions"
+import { LexemType } from "../../../lexer"
+import { TypedHandler } from "../types"
 
 export const NumberHandler: TypedHandler = ({ expectCurrent, next }) => {
     const { text } = expectCurrent(LexemType.NUMBER)
