@@ -113,7 +113,7 @@ export default new Lexer([
         type: LexemType.QUOTES
     },
     {
-        regexp: "[a-zA-Z]+",
+        regexp: "[a-zA-Zа-яА-ЯіїєІЇЄа-я]([a-zA-Zа-яА-ЯіїєІЇЄа-я0-9]*)",
         type: LexemType.VARIABEL
     },
     {
