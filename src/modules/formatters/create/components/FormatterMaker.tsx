@@ -10,6 +10,7 @@ import { Runtime } from "../../../../interpreter/runtime";
 
 import { AppDatabase, useDexie, useLazyDexie } from "../../../../module-core/database";
 import { useTranslate } from "../../../../module-core/i18n-js";
+import { delay, useCache, useLoading } from "../../../common";
 
 import { Formatter } from "../../types";
 
@@ -62,11 +63,22 @@ const FormatterMaker: FC = () => {
 
     const [output, setOutput] = useState('')
     const [error, setError] = useState('')
+    const [code, setCode] = useCache<string>('create-formatter-code')
+    const [saving, setSaving] = useState(false)
 
-    const { register, handleSubmit, watch, getValues, formState: { errors } } = useForm<Formatter>()
+    const { register, handleSubmit, watch, formState: { errors }, reset } = useForm<Formatter>()
     
-    const createFormatterQuery = useCallback((db: AppDatabase, formatter: Formatter) => db.formatters.add(formatter), [])
-    const [createFormatter] = useLazyDexie(createFormatterQuery)
+    const createFormatterQuery = useCallback(
+        async (db: AppDatabase, formatter: Omit<Formatter, 'code'>) => {
+            await db.formatters.add({ ...formatter, code: code as string })
+            await delay(400);
+            (setCode as any)('')
+            reset()
+        },
+        [code, setCode, reset]
+    )
+    const createFormatterQueryWithLoading = useLoading(createFormatterQuery, setSaving)
+    const [createFormatter] = useLazyDexie(createFormatterQueryWithLoading)
 
     const documentTypes = useDexie(db => db.documentTypes.toArray())
 
@@ -74,7 +86,6 @@ const FormatterMaker: FC = () => {
     const [loadDocumentExample, documentExample] = useLazyDexie(loadDocumentExampleQuery)
     
     const documentTypeId = watch('type') || null
-    console.log(documentTypeId)
 
     useEffect(() => {
         documentTypeId !== null && loadDocumentExample(Number(documentTypeId))
@@ -106,7 +117,7 @@ const FormatterMaker: FC = () => {
 
             <Form.Group className="mb-3">
                 <Form.Label>Code</Form.Label>
-                <Form.Control {...register('code', { required: true })} as="textarea" rows={6} />
+                <Form.Control value={code as string} onChange={(e) => (setCode as any)(e.currentTarget.value || '')} as="textarea" rows={6} />
             </Form.Group>
             {documentExample && (
                 <Row className="align-items-stretch">
@@ -115,9 +126,8 @@ const FormatterMaker: FC = () => {
                     </Col>
                     <Col xs={4} className="d-flex justify-content-center align-items-center">
                         <Button onClick={() => {
-                            const code = getValues().code
                             const document = documentExample.meta
-                            const { error, output } = tryCode(code, document)
+                            const { error, output } = tryCode(code as string, document)
                             console.log(error, output)
                             setOutput(output || '')
                             setError(error || '')
@@ -130,7 +140,7 @@ const FormatterMaker: FC = () => {
                 </Row>
             )}
             <h3 className="text-danger">{(errors.type || errors.code || errors.name)?.message || ""}</h3>
-            <Button type="submit">Save</Button>
+            <Button type="submit" disabled={saving}>{saving ? 'Saving...': 'Save'}</Button>
         </Form>
     )
 }

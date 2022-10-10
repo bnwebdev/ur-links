@@ -1,3 +1,4 @@
 export * from './useModal'
 export * from './useLoading'
-export * from './useWithoutInitialEffect'
+export * from './useInitializedEffect'
+export * from './useCache'

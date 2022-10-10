@@ -10,7 +10,7 @@ import {
     StringTypeDescription,
     TypeDescription
 } from "../../../../RootFactory/types";
-import { delay, useLoading, useWithoutInitialEffect } from "../../../common";
+import { delay, useInitializedEffect, useLoading } from "../../../common";
 import { DocumentType, useValidationSchema } from "../../../document-types";
 import { Document } from "../../types";
 
@@ -182,7 +182,7 @@ const DocumentMakerForm: FC<Props> = ({ documentType }) => {
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
 
-    useWithoutInitialEffect(() => {
+    useInitializedEffect(() => {
         setDocument(getInitialValue(typeDescription))
     }, [typeDescription])
 
