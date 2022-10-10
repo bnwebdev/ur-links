@@ -1,5 +1,6 @@
 import { FC, useState } from "react";
 import { Button, Spinner, Table } from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
 import { useDexie, useLazyDexie } from "../../../module-core/database";
 import { useTranslate } from "../../../module-core/i18n-js";
 import { delay, useLoading } from "../../common";
@@ -49,7 +50,11 @@ const Formatters: FC = () => {
             <tbody>
                 {formatters.map(formatter =>
                     <tr key={formatter.id}>
-                        <td>{formatter.id}</td>
+                        <td>
+                            <LinkContainer to={`/not-implemented`}>
+                                <a>#{formatter.id}</a>
+                            </LinkContainer>
+                        </td>
                         <td>{formatter.name}</td>
                         <td>{typeNames.get(formatter.type) || 'Missed type'}</td>
                         <td width={200}>
