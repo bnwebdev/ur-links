@@ -16,7 +16,7 @@ const WorkAreas: FC = () => {
     const [saveWorkArea] = useLazyDexie<unknown, [WorkArea]>((db, workArea) => db.workAreas.add(workArea))
 
     const createHandler = useCallback(async ({ label }: { label: string }) => {
-        await saveWorkArea({ label, documentIds: [], formatterIds: [] })
+        await saveWorkArea({ label })
         close()
     }, [saveWorkArea, close])
     const createHandlerWithLoading = useLoading(createHandler, setSaving)

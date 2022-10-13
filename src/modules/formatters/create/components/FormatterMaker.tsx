@@ -2,57 +2,21 @@ import { FC, useCallback, useEffect, useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import ReactJson from "react-json-view";
-import { Context } from "../../../../interpreter/ast/Context";
-
-import lexer from "../../../../interpreter/lexer";
-import parser from "../../../../interpreter/parser";
-import { Runtime } from "../../../../interpreter/runtime";
 
 import { AppDatabase, useDexie, useLazyDexie } from "../../../../module-core/database";
 import { useTranslate } from "../../../../module-core/i18n-js";
 import { delay, useCache, useLoading } from "../../../common";
 
 import { Formatter } from "../../types";
-
-const runtimize = (value: string | null | undefined | number | boolean | Record<string, any>): Runtime => {
-    if (!value) {
-        return new Runtime.Null()
-    }
-
-    switch (typeof value) {
-        case "boolean": return new Runtime.Boolean(value)
-        case "object": return new Runtime.Object(
-            Object.fromEntries(
-                Object.entries(value).map(([key, v]) => [key, runtimize(v)])
-            )
-        )
-        case "string": return new Runtime.String(value)
-        case "number": return new Runtime.Number(value)
-        default:
-            throw new Error(`Mustn't be called`)
-    }
-}
+import { buildAst, formatDocument, prepareRuntimeContextWithFormatter } from "../../utils";
 
 const tryCode = (code: string, document: Record<string, any>) => {
     try {
-        const tokens = lexer.tokenize(code)
-        const ast = parser.parse(tokens)
-        const context: Context = {}
-        ast.execute(context)
-        
-        if (!context.format || !Runtime.tryCast(context.format as Runtime, Runtime.Function)) {
-            throw new Error(
-                `Error: You must create function with name format, that use one argument (it will be document described with type)`
-            )
-        }
+        const ast = buildAst(code)
+        const context = prepareRuntimeContextWithFormatter(ast)
+        const serializedDocument = formatDocument(context, document)
 
-        const callAst = parser.parse(lexer.tokenize(`format(document);`))
-        const runtime = callAst.execute({
-            ...context,
-            document: runtimize(document)
-        })
-
-        return { output: Runtime.cast(runtime, Runtime.String).getValue(), error: null }
+        return { output: serializedDocument, error: null }
     } catch (err) {
         return { error: (err as Error).message, output: null }
     }
